@@ -45,26 +45,26 @@ if (!function_exists('humescores_setup')) {
 
         // This theme uses wp_nav_menu() in one location.
         register_nav_menus([
-        'primary' => esc_html__('Primary', 'humescores'),
-    ]);
+            'primary' => esc_html__('Primary', 'humescores'),
+        ]);
 
         /*
          * Switch default core markup for search form, comment form, and comments
          * to output valid HTML5.
          */
         add_theme_support('html5', [
-        'search-form',
-        'comment-form',
-        'comment-list',
-        'gallery',
-        'caption',
-    ]);
+            'search-form',
+            'comment-form',
+            'comment-list',
+            'gallery',
+            'caption',
+        ]);
 
         // Set up the WordPress core custom background feature.
         add_theme_support('custom-background', apply_filters('humescores_custom_background_args', [
-        'default-color' => 'ffffff',
-        'default-image' => '',
-    ]));
+            'default-color' => 'ffffff',
+            'default-image' => '',
+        ]));
     }
 }
 add_action('after_setup_theme', 'humescores_setup');
@@ -106,6 +106,12 @@ add_action('widgets_init', 'humescores_widgets_init');
  */
 function humescores_scripts()
 {
+    // Enqueue Google Fonts: Source Sans Pro and PT Serif
+    wp_enqueue_style(
+        'humescores-fonts',
+        humescores_fonts_url()
+    );
+
     wp_enqueue_style('humescores-style', get_stylesheet_uri());
 
     wp_enqueue_script('humescores-navigation', get_template_directory_uri() . '/js/navigation.js', [], '20151215', true);
@@ -117,6 +123,64 @@ function humescores_scripts()
     }
 }
 add_action('wp_enqueue_scripts', 'humescores_scripts');
+
+/**
+ * Register custom fonts.
+ */
+function humescores_fonts_url()
+{
+    $fonts_url = '';
+
+    /*
+     * Translators: If there are characters in your language that are not
+     * supported by Source Sans Pro and PT Serif, translate this to 'off'. Do not translate
+     * into your own language.
+     */
+    $source_sans_pro = _x('on', 'Source Sans Pro font: on or off', 'humescores');
+    $pt_serif        = _x('on', 'PT Serif font: on or off', 'humescores');
+
+    $font_families = [];
+
+    if ('off' !== $source_sans_pro) {
+        $font_families[] = 'Source Sans Pro:400,400i,600,900';
+    }
+
+    if ('off' !== $pt_serif) {
+        $font_families[] = 'PT Serif:400,400i,700,700i';
+    }
+
+    if (in_array('on', [$source_sans_pro, $pt_serif])) {
+        $query_args = [
+            'family' => urlencode(implode('|', $font_families)),
+            'subset' => urlencode('latin,latin-ext'),
+        ];
+        $fonts_url = add_query_arg($query_args, 'https://fonts.googleapis.com/css');
+    }
+
+    return esc_url_raw($fonts_url);
+}
+
+/**
+ * Add preconnect for Google Fonts.
+ *
+ * @since Twenty Seventeen 1.0
+ *
+ * @param  array  $urls          URLs to print for resource hints.
+ * @param  string $relation_type The relation type the URLs are printed.
+ * @return array  $urls           URLs to print for resource hints.
+ */
+function humescores_resource_hints($urls, $relation_type)
+{
+    if (wp_style_is('humescores-fonts', 'queue') && 'preconnect' === $relation_type) {
+        $urls[] = [
+            'href' => 'https://fonts.gstatic.com',
+            'crossorigin',
+        ];
+    }
+
+    return $urls;
+}
+add_filter('wp_resource_hints', 'humescores_resource_hints', 10, 2);
 
 /**
  * Implement the Custom Header feature.
