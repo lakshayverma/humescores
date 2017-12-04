@@ -1,9 +1,9 @@
 /*!
 Theme Name: Humescores
-Theme URI: https: //github.com/lakshayverma/humescores
-Author: Lakshay Verma
-Author URI: https://github.com/lakshayverma/
-Description: A new theme for a new time. This theme showcases the best of WordPress and _s and is the project for Building Themes from scratch.
+Theme URI: https://github.com/mor10/humescores/
+Author: Morten Rand-Hendriksen
+Author URI: https://mor10.com/courses
+Description: A new theme for a new time. This theme showcases the best of WordPress and Underscores and is the project for the Building Themes From Scratch Using Underscores course at LinkedIn Learning and Lynda.com.
 Version: 1.0.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -86,14 +86,14 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 @import "modules/clearings";
 
 /*--------------------------------------------------------------
-# Widgets
---------------------------------------------------------------*/
-@import "site/secondary/widgets";
-
-/*--------------------------------------------------------------
 # Content
 --------------------------------------------------------------*/
 @import "site/site";
+
+/*--------------------------------------------------------------
+# Widgets
+--------------------------------------------------------------*/
+@import "site/secondary/widgets";
 
 /*--------------------------------------------------------------
 # Infinite scroll
